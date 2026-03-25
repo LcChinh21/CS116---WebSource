@@ -606,7 +606,12 @@ window.addEventListener("DOMContentLoaded", () => {
 // ===== Forecast Dashboard (Backend API) =====
 
 const FORECAST_API_BASE = "http://127.0.0.1:8001";
-const FORECAST_STATIC_LOCATIONS = ["1000", "1001", "1002", "1003", "1004"];
+const FORECAST_STATIC_LOCATIONS = [
+    "1000", "1001", "1002", "1003", "1004",
+    "1005", "1006", "1007", "1008", "1009",
+    "1010", "1011", "1012", "1013", "1014",
+    "1015", "1016", "1017", "1018", "1019",
+];
 const FORECAST_MODE = ["localhost", "127.0.0.1"].includes(window.location.hostname)
     ? "api"
     : "static";
@@ -619,6 +624,7 @@ const forecastState = {
     mae: null,
     loading: false,
     staticRows: [],
+    staticMae: null,
 };
 
 function getForecastConnectionHint() {
@@ -644,9 +650,13 @@ function buildStaticForecastRows() {
 
             const pop = Number(row.purchase_count ?? 0);
             const qty = Math.max(1, Math.round(Number.isFinite(pop) ? pop / 20 : 1));
-            const hash = Math.abs(stringHash(itemId)) % FORECAST_STATIC_LOCATIONS.length;
+            const actualQty = Math.max(1, Math.round(Number.isFinite(pop) ? pop / 18 : qty));
+
+            // Use a wider hash space to avoid repetitive location values in first pages.
+            const key = `${itemId}-${product.category || ""}-${product.category_l2 || ""}`;
+            const hash = Math.abs(stringHash(key)) % FORECAST_STATIC_LOCATIONS.length;
             const location = FORECAST_STATIC_LOCATIONS[hash];
-            rows.push({ location, item_id: itemId, qty });
+            rows.push({ location, item_id: itemId, qty, actual_qty: actualQty });
         }
     }
 
@@ -658,17 +668,58 @@ function buildStaticForecastRows() {
                 location: FORECAST_STATIC_LOCATIONS[hash],
                 item_id: itemId,
                 qty: 1,
+                actual_qty: 1,
             });
         }
     }
 
-    rows.sort((a, b) => {
-        if (b.qty !== a.qty) return b.qty - a.qty;
-        if (a.item_id !== b.item_id) return a.item_id.localeCompare(b.item_id);
-        return a.location.localeCompare(b.location);
-    });
+    // Balance rows across locations so first pages are not dominated by one location.
+    const buckets = new Map();
+    for (const row of rows) {
+        const key = String(row.location);
+        if (!buckets.has(key)) buckets.set(key, []);
+        buckets.get(key).push(row);
+    }
 
-    return rows;
+    for (const [, list] of buckets.entries()) {
+        list.sort((a, b) => {
+            if (b.qty !== a.qty) return b.qty - a.qty;
+            return String(a.item_id).localeCompare(String(b.item_id));
+        });
+    }
+
+    const locations = [...buckets.keys()].sort();
+    const merged = [];
+    let hasData = true;
+    while (hasData) {
+        hasData = false;
+        for (const loc of locations) {
+            const list = buckets.get(loc);
+            if (list && list.length > 0) {
+                merged.push(list.shift());
+                hasData = true;
+            }
+        }
+    }
+
+    return merged;
+}
+
+function calculateStaticMae(rows) {
+    if (!Array.isArray(rows) || rows.length === 0) return null;
+    let sumAbsError = 0;
+    let count = 0;
+
+    for (const row of rows) {
+        const pred = Number(row.qty);
+        const actual = Number(row.actual_qty);
+        if (!Number.isFinite(pred) || !Number.isFinite(actual)) continue;
+        sumAbsError += Math.abs(pred - actual);
+        count += 1;
+    }
+
+    if (count === 0) return null;
+    return sumAbsError / count;
 }
 
 function paginateForecastRows(rows) {
@@ -681,7 +732,7 @@ function paginateForecastRows(rows) {
     if (totalRows === 0) {
         return {
             rows: [],
-            mae: 0,
+            mae: forecastState.staticMae,
             page: 1,
             page_size: forecastState.pageSize,
             total_rows: 0,
@@ -698,7 +749,7 @@ function paginateForecastRows(rows) {
     const locations = [...new Set(rows.map((r) => String(r.location)))].sort();
     return {
         rows: filtered.slice(start, end),
-        mae: 0,
+        mae: forecastState.staticMae,
         page,
         page_size: forecastState.pageSize,
         total_rows: totalRows,
@@ -751,6 +802,8 @@ function renderForecastMeta(data) {
     if (maeEl && typeof data.mae === "number") {
         forecastState.mae = data.mae;
         maeEl.textContent = `MAE: ${data.mae.toFixed(4)}`;
+    } else if (maeEl) {
+        maeEl.textContent = "MAE: N/A";
     }
 
     forecastState.page = Number(data.page || 1);
@@ -841,12 +894,16 @@ async function runForecastFromLocalData() {
         forecastState.page = 1;
         forecastState.location = "";
         forecastState.staticRows = buildStaticForecastRows();
+        forecastState.staticMae = calculateStaticMae(forecastState.staticRows);
 
         const locationSelect = document.getElementById("forecast-location-filter");
         if (locationSelect) locationSelect.value = "";
 
         await fetchForecastPage();
-        setForecastStatus(`Static mode sẵn sàng. Tổng dòng: ${forecastState.staticRows.length}`);
+        const maeLabel = Number.isFinite(forecastState.staticMae)
+            ? forecastState.staticMae.toFixed(4)
+            : "N/A";
+        setForecastStatus(`Static mode sẵn sàng. Tổng dòng: ${forecastState.staticRows.length}, MAE: ${maeLabel}`);
         setForecastLoading(false);
         return;
     }
