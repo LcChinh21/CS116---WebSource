@@ -606,6 +606,10 @@ window.addEventListener("DOMContentLoaded", () => {
 // ===== Forecast Dashboard (Backend API) =====
 
 const FORECAST_API_BASE = "http://127.0.0.1:8001";
+const FORECAST_STATIC_LOCATIONS = ["1000", "1001", "1002", "1003", "1004"];
+const FORECAST_MODE = ["localhost", "127.0.0.1"].includes(window.location.hostname)
+    ? "api"
+    : "static";
 
 const forecastState = {
     page: 1,
@@ -614,6 +618,7 @@ const forecastState = {
     location: "",
     mae: null,
     loading: false,
+    staticRows: [],
 };
 
 function getForecastConnectionHint() {
@@ -625,6 +630,81 @@ function toForecastErrorMessage(err) {
         return getForecastConnectionHint();
     }
     return err?.message || "Lỗi không xác định";
+}
+
+function buildStaticForecastRows() {
+    const byId = new Map(products.map((p) => [String(p.id), p]));
+    const rows = [];
+
+    if (Array.isArray(popularityRows) && popularityRows.length > 0) {
+        for (const row of popularityRows) {
+            const itemId = String(row.item_id ?? row.id ?? "");
+            const product = byId.get(itemId);
+            if (!itemId || !product) continue;
+
+            const pop = Number(row.purchase_count ?? 0);
+            const qty = Math.max(1, Math.round(Number.isFinite(pop) ? pop / 20 : 1));
+            const hash = Math.abs(stringHash(itemId)) % FORECAST_STATIC_LOCATIONS.length;
+            const location = FORECAST_STATIC_LOCATIONS[hash];
+            rows.push({ location, item_id: itemId, qty });
+        }
+    }
+
+    if (rows.length === 0) {
+        for (const p of products.slice(0, 1000)) {
+            const itemId = String(p.id);
+            const hash = Math.abs(stringHash(itemId)) % FORECAST_STATIC_LOCATIONS.length;
+            rows.push({
+                location: FORECAST_STATIC_LOCATIONS[hash],
+                item_id: itemId,
+                qty: 1,
+            });
+        }
+    }
+
+    rows.sort((a, b) => {
+        if (b.qty !== a.qty) return b.qty - a.qty;
+        if (a.item_id !== b.item_id) return a.item_id.localeCompare(b.item_id);
+        return a.location.localeCompare(b.location);
+    });
+
+    return rows;
+}
+
+function paginateForecastRows(rows) {
+    let filtered = rows;
+    if (forecastState.location) {
+        filtered = rows.filter((r) => String(r.location) === String(forecastState.location));
+    }
+
+    const totalRows = filtered.length;
+    if (totalRows === 0) {
+        return {
+            rows: [],
+            mae: 0,
+            page: 1,
+            page_size: forecastState.pageSize,
+            total_rows: 0,
+            total_pages: 0,
+            locations: [],
+        };
+    }
+
+    const totalPages = Math.ceil(totalRows / forecastState.pageSize);
+    const page = Math.max(1, Math.min(forecastState.page, totalPages));
+    const start = (page - 1) * forecastState.pageSize;
+    const end = start + forecastState.pageSize;
+
+    const locations = [...new Set(rows.map((r) => String(r.location)))].sort();
+    return {
+        rows: filtered.slice(start, end),
+        mae: 0,
+        page,
+        page_size: forecastState.pageSize,
+        total_rows: totalRows,
+        total_pages: totalPages,
+        locations,
+    };
 }
 
 function setForecastStatus(message, isError = false) {
@@ -711,6 +791,15 @@ function populateForecastLocations(locations) {
 }
 
 async function fetchForecastPage() {
+    if (FORECAST_MODE === "static") {
+        const data = paginateForecastRows(forecastState.staticRows);
+        renderForecastRows(data.rows);
+        renderForecastMeta(data);
+        populateForecastLocations(data.locations);
+        setForecastStatus(`Static mode: ${data.rows.length}/${data.total_rows} dòng`);
+        return;
+    }
+
     const query = new URLSearchParams({
         page: String(forecastState.page),
         page_size: String(forecastState.pageSize),
@@ -740,6 +829,28 @@ async function fetchForecastPage() {
 }
 
 async function runForecastFromLocalData() {
+    if (FORECAST_MODE === "static") {
+        if (!Array.isArray(products) || products.length === 0) {
+            setForecastStatus("Dữ liệu sản phẩm chưa tải xong, vui lòng thử lại sau vài giây", true);
+            return;
+        }
+
+        setForecastLoading(true);
+        setForecastStatus("Đang tạo forecast từ dữ liệu JSON local...");
+
+        forecastState.page = 1;
+        forecastState.location = "";
+        forecastState.staticRows = buildStaticForecastRows();
+
+        const locationSelect = document.getElementById("forecast-location-filter");
+        if (locationSelect) locationSelect.value = "";
+
+        await fetchForecastPage();
+        setForecastStatus(`Static mode sẵn sàng. Tổng dòng: ${forecastState.staticRows.length}`);
+        setForecastLoading(false);
+        return;
+    }
+
     setForecastLoading(true);
     setForecastStatus("Đang chạy forecast từ dữ liệu local trong data/... có thể mất vài giây");
 
@@ -767,6 +878,11 @@ async function runForecastFromLocalData() {
 }
 
 async function checkForecastApiHealth() {
+    if (FORECAST_MODE === "static") {
+        setForecastStatus("Static mode (deploy web): Nhấn Run Forecast để tạo bảng 3 cột từ dữ liệu local JSON.");
+        return;
+    }
+
     try {
         const res = await fetch(`${FORECAST_API_BASE}/api/health`);
         if (!res.ok) throw new Error("Forecast API phản hồi lỗi");
