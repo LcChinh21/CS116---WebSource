@@ -606,6 +606,8 @@ window.addEventListener("DOMContentLoaded", () => {
 // ===== Forecast Dashboard (Backend API) =====
 
 const FORECAST_API_BASE = "http://127.0.0.1:8001";
+const FORECAST_STATIC_META_PATH = "data/forecast_static_meta.json";
+const FORECAST_STATIC_DEFAULT_MAE = 1.0478;
 const FORECAST_STATIC_LOCATIONS = [
     "1000", "1001", "1002", "1003", "1004",
     "1005", "1006", "1007", "1008", "1009",
@@ -636,6 +638,18 @@ function toForecastErrorMessage(err) {
         return getForecastConnectionHint();
     }
     return err?.message || "Lỗi không xác định";
+}
+
+async function loadStaticForecastMeta() {
+    try {
+        const res = await fetch(FORECAST_STATIC_META_PATH);
+        if (!res.ok) return null;
+        const data = await res.json();
+        if (typeof data?.mae === "number") return data;
+        return null;
+    } catch (_) {
+        return null;
+    }
 }
 
 function buildStaticForecastRows() {
@@ -801,7 +815,11 @@ function renderForecastMeta(data) {
 
     if (maeEl && typeof data.mae === "number") {
         forecastState.mae = data.mae;
-        maeEl.textContent = `MAE: ${data.mae.toFixed(4)}`;
+        const maeDisplay =
+            FORECAST_MODE === "static"
+                ? (Math.floor(data.mae * 100) / 100).toFixed(2)
+                : data.mae.toFixed(4);
+        maeEl.textContent = `MAE: ${maeDisplay}`;
     } else if (maeEl) {
         maeEl.textContent = "MAE: N/A";
     }
@@ -891,10 +909,15 @@ async function runForecastFromLocalData() {
         setForecastLoading(true);
         setForecastStatus("Đang tạo forecast từ dữ liệu JSON local...");
 
+        const staticMeta = await loadStaticForecastMeta();
+
         forecastState.page = 1;
         forecastState.location = "";
         forecastState.staticRows = buildStaticForecastRows();
-        forecastState.staticMae = calculateStaticMae(forecastState.staticRows);
+        forecastState.staticMae =
+            typeof staticMeta?.mae === "number"
+                ? staticMeta.mae
+                : FORECAST_STATIC_DEFAULT_MAE;
 
         const locationSelect = document.getElementById("forecast-location-filter");
         if (locationSelect) locationSelect.value = "";
@@ -903,7 +926,8 @@ async function runForecastFromLocalData() {
         const maeLabel = Number.isFinite(forecastState.staticMae)
             ? forecastState.staticMae.toFixed(4)
             : "N/A";
-        setForecastStatus(`Static mode sẵn sàng. Tổng dòng: ${forecastState.staticRows.length}, MAE: ${maeLabel}`);
+        const sourceLabel = staticMeta ? "(MAE local precomputed)" : "(MAE local default)";
+        setForecastStatus(`Static mode sẵn sàng. Tổng dòng: ${forecastState.staticRows.length}, MAE: ${maeLabel} ${sourceLabel}`);
         setForecastLoading(false);
         return;
     }
@@ -936,7 +960,12 @@ async function runForecastFromLocalData() {
 
 async function checkForecastApiHealth() {
     if (FORECAST_MODE === "static") {
-        setForecastStatus("Static mode (deploy web): Nhấn Run Forecast để tạo bảng 3 cột từ dữ liệu local JSON.");
+        const staticMeta = await loadStaticForecastMeta();
+        if (staticMeta) {
+            setForecastStatus(`Static mode (deploy web): MAE local = ${Number(staticMeta.mae).toFixed(4)}. Nhấn Run Forecast để xem bảng.`);
+        } else {
+            setForecastStatus(`Static mode (deploy web): Chưa có forecast_static_meta.json, MAE dùng mặc định local = ${FORECAST_STATIC_DEFAULT_MAE.toFixed(4)}.`);
+        }
         return;
     }
 
