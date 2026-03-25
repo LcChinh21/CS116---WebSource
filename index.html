@@ -2,62 +2,115 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8" />
-    <title>Demo gợi ý sản phẩm tương tự</title>
+    <title>Cửa hàng - Gợi ý sản phẩm</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link rel="stylesheet" href="styles.css" />
-    <!-- Highlight.js theme for source code coloring -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-light.min.css" />
 </head>
 <body>
-    <header class="topbar">
-        <div class="topbar-text">
-            <h1>Demo gợi ý sản phẩm tương tự</h1>
-            <p class="subtitle">2 giải pháp recommendation + xem source code trực tiếp</p>
+    <header class="navbar">
+        <div class="navbar-container">
+            <div class="navbar-brand">
+                <i class="fas fa-store"></i>
+                <span>Shop</span>
+            </div>
+            
+            <div class="navbar-search">
+                <input type="text" id="search-input" class="search-box" placeholder="Tìm sản phẩm...">
+                <i class="fas fa-search"></i>
+            </div>
+
+            <div class="navbar-actions">
+                <button id="cart-button" class="cart-button">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span id="cart-count" class="cart-count">0</span>
+                </button>
+            </div>
         </div>
-        <button id="btn-toggle-code" class="code-toggle-button header-toggle">Hiện source code</button>
     </header>
 
-    <main class="layout layout-code-hidden">
-        <section class="panel products-panel">
-            <h2>Danh sách sản phẩm</h2>
-            <div id="product-list" class="product-list"></div>
-        </section>
+    <main class="main-container">
+        <div class="content-wrapper">
+            <aside class="sidebar">
+                <h3 class="sidebar-title">Danh sách sản phẩm</h3>
+                <div id="product-list" class="product-list"></div>
+            </aside>
 
-        <section class="panel detail-panel">
-            <h2>Chi tiết &amp; gợi ý</h2>
-            <div id="product-detail" class="product-detail empty-state">
-                Chọn một sản phẩm ở bên trái để xem gợi ý.
-            </div>
+            <section class="main-content">
+                <div class="product-showcase">
+                    <div id="product-detail" class="product-detail empty-state">
+                        <i class="fas fa-box"></i>
+                        <p>Chọn một sản phẩm để xem chi tiết</p>
+                    </div>
+                </div>
 
-            <div class="algo-switcher">
-                <span>Thuật toán gợi ý:</span>
-                <label><input type="radio" name="algo" value="fbt" checked> Giải pháp 1: FBT (Frequently Bought Together)</label>
-                <label><input type="radio" name="algo" value="sim"> Giải pháp 2: SIM (category + price)</label>
-                <label><input type="radio" name="algo" value="upsale"> Giải pháp 3: UPSALE (same category + higher price)</label>
-            </div>
+                <div class="recommendation-section">
+                    <div class="algo-switcher-modern">
+                        <div class="switcher-header">
+                            <h4>Chọn cách gợi ý:</h4>
+                        </div>
+                        <div class="switcher-options">
+                            <label class="switcher-label">
+                                <input type="radio" name="algo" value="fbt" checked>
+                                <span>Thường mua cùng</span>
+                            </label>
+                            <label class="switcher-label">
+                                <input type="radio" name="algo" value="sim">
+                                <span>Tương tự</span>
+                            </label>
+                            <label class="switcher-label">
+                                <input type="radio" name="algo" value="upsale">
+                                <span>Nâng cấp</span>
+                            </label>
+                        </div>
+                    </div>
 
-            <h3>Sản phẩm tương tự</h3>
-            <div id="similar-items" class="similar-items"></div>
-        </section>
+                    <h3 class="recommendations-title">Sản phẩm đề xuất</h3>
+                    <div id="similar-items" class="similar-items"></div>
+                </div>
+            </section>
+        </div>
 
         <section class="panel code-panel" id="code-panel">
-            <div class="code-panel-header">
-                <h2>Source code thuật toán</h2>
-            </div>
-            <div class="code-buttons">
-                <button id="btn-code-python">Xem code Python (FBT + SIM)</button>
-            </div>
-            <pre id="code-view" class="code-view"><code class="language-javascript">// Chọn 1 trong 2 nút bên trên để xem source code
+            <button id="btn-toggle-code" class="toggle-code-btn">
+                <i class="fas fa-code"></i> Xem source code
+            </button>
+            <div class="code-panel-content" style="display: none;">
+                <h3>Source code thuật toán</h3>
+                <div class="code-buttons">
+                    <button id="btn-code-python">Python (FBT + SIM)</button>
+                </div>
+                <pre id="code-view" class="code-view"><code class="language-javascript">// Chọn nút bên trên để xem source code
 // của hàm gợi ý tương ứng.
 </code></pre>
+            </div>
         </section>
     </main>
 
     <footer class="footer">
-        <span>Demo gợi ý sản phẩm tương tự (FBT + SIM)</span>
+        <div class="footer-content">
+            <p>&copy; 2024 Shop - Hệ thống gợi ý sản phẩm thông minh</p>
+        </div>
     </footer>
 
-    <!-- Highlight.js core library -->
+    <!-- Cart Modal -->
+    <div id="cart-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Giỏ hàng</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div id="cart-items" class="modal-body">
+                <p class="empty-cart">Giỏ hàng trống</p>
+            </div>
+            <div class="modal-footer">
+                <p id="cart-total" class="cart-total"></p>
+                <button class="checkout-btn">Thanh toán</button>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
     <script src="app.js"></script>
 </body>

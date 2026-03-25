@@ -6,6 +6,7 @@ let fbtRows = [];
 let fbtIndex = new Map();
 let popularityRows = [];
 let popularityIndex = new Map();
+let cart = [];
 
 async function loadProducts() {
     const listEl = document.getElementById("product-list");
@@ -31,7 +32,6 @@ async function loadProducts() {
             popularityRows = await resPopularity.json();
             buildPopularityIndex();
         } else {
-            // Fallback: xấp xỉ purchase_count từ dữ liệu FBT nếu chưa có popularity.json
             buildPopularityFallbackFromFbt();
         }
 
@@ -105,6 +105,503 @@ function dedupeRecommendations(rows, k = 10) {
 
     return result;
 }
+
+function buildFbtIndex() {
+    fbtIndex = new Map();
+    if (!Array.isArray(fbtRows) || fbtRows.length === 0) return;
+
+    const byId = new Map(products.map((p) => [String(p.id), p]));
+
+    for (const row of fbtRows) {
+        const a = String(row.a);
+        const b = String(row.b);
+        const product = byId.get(b);
+        if (!product) continue;
+
+        const list = fbtIndex.get(a) || [];
+        list.push({
+            product,
+            cnt: row.cnt,
+            conf: row.conf,
+            totalBaskets: row.t_a,
+        });
+        fbtIndex.set(a, list);
+    }
+
+    for (const [key, list] of fbtIndex.entries()) {
+        list.sort((x, y) => {
+            if (y.conf !== x.conf) return y.conf - x.conf;
+            return y.cnt - x.cnt;
+        });
+        fbtIndex.set(key, list);
+    }
+}
+
+function buildPopularityIndex() {
+    popularityIndex = new Map();
+    if (!Array.isArray(popularityRows) || popularityRows.length === 0) return;
+
+    for (const row of popularityRows) {
+        const key = String(row.item_id ?? row.id ?? "");
+        if (!key) continue;
+        const cnt = Number(row.purchase_count ?? 0);
+        popularityIndex.set(key, Number.isFinite(cnt) ? cnt : 0);
+    }
+}
+
+function buildPopularityFallbackFromFbt() {
+    popularityIndex = new Map();
+    if (!Array.isArray(fbtRows) || fbtRows.length === 0) return;
+
+    for (const row of fbtRows) {
+        const key = String(row.a ?? "");
+        if (!key) continue;
+        const tA = Number(row.t_a ?? 0);
+        if (!Number.isFinite(tA)) continue;
+        const prev = popularityIndex.get(key) || 0;
+        if (tA > prev) popularityIndex.set(key, tA);
+    }
+}
+
+function getThumbStyle(product) {
+    const key = product.category || product.name || String(product.id || "");
+    const h = stringHash(key) % 360;
+    const h2 = (h + 40) % 360;
+    return `background: linear-gradient(135deg, hsl(${h}, 85%, 60%), hsl(${h2}, 85%, 40%));`;
+}
+
+function renderProductList(filterText = "") {
+    const listEl = document.getElementById("product-list");
+    listEl.innerHTML = "";
+    
+    let visibleProducts = products.filter(
+        (p) => p.sale_status === undefined || p.sale_status === 1
+    );
+
+    if (filterText.trim()) {
+        const lowerFilter = filterText.toLowerCase();
+        visibleProducts = visibleProducts.filter(p =>
+            p.name.toLowerCase().includes(lowerFilter) ||
+            p.category?.toLowerCase().includes(lowerFilter) ||
+            String(p.id).includes(lowerFilter)
+        );
+    }
+
+    visibleProducts.forEach((p) => {
+        const card = document.createElement("div");
+        card.className = "product-card" + (p.id === currentProductId ? " active" : "");
+        card.innerHTML = `
+            <div class="product-card-title">${p.name}</div>
+            <div class="product-card-meta">
+                <span class="badge">${p.category}</span>
+                <span class="product-price">${formatPriceVND(p.price)}</span>
+            </div>
+        `;
+        card.addEventListener("click", () => {
+            currentProductId = p.id;
+            renderProductList(filterText);
+            renderDetailAndSimilar();
+        });
+        listEl.appendChild(card);
+    });
+}
+
+function renderDetailAndSimilar() {
+    const detailEl = document.getElementById("product-detail");
+    const similarEl = document.getElementById("similar-items");
+
+    const product = products.find((p) => p.id === currentProductId);
+    if (!product) {
+        detailEl.classList.add("empty-state");
+        detailEl.innerHTML = '<i class="fas fa-box"></i><p>Chọn một sản phẩm để xem chi tiết</p>';
+        similarEl.innerHTML = "";
+        return;
+    }
+
+    detailEl.classList.remove("empty-state");
+    detailEl.innerHTML = `
+        <div class="detail-header">
+            <div class="detail-thumb" style="${getThumbStyle(product)}">
+                <span>${getInitials(product.name)}</span>
+            </div>
+            <div class="detail-main">
+                <h3 class="product-detail-title">${product.name}</h3>
+                <div class="product-detail-meta">
+                    <span><strong>${formatPriceVND(product.price)}</strong></span>
+                    <span>${formatRating(product.rating)}</span>
+                    <span class="badge">${product.category}</span>
+                </div>
+                <div class="product-detail-id">ID: ${product.id}</div>
+                <div class="product-detail-desc">${product.description || "Không có mô tả"}</div>
+                <div class="detail-actions">
+                    <button class="btn-add-cart" data-product-id="${product.id}">
+                        <i class="fas fa-shopping-cart"></i> Thêm vào giỏ
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+
+    // Add cart button event
+    const addCartBtn = detailEl.querySelector('.btn-add-cart');
+    if (addCartBtn) {
+        addCartBtn.addEventListener('click', () => {
+            addToCart(product);
+        });
+    }
+
+    let recommender = recommendByFbt;
+    if (currentAlgorithm === "sim") {
+        recommender = recommendBySim;
+    } else if (currentAlgorithm === "upsale") {
+        recommender = recommendByUpsale;
+    }
+    const similar = recommender(products, product, 10);
+
+    similarEl.innerHTML = "";
+    if (!similar.length) {
+        if (currentAlgorithm === "fbt") {
+            similarEl.innerHTML = '<p style="text-align:center; color: #9ca3af; padding: 20px;">Không có sản phẩm thường mua cùng</p>';
+        } else if (currentAlgorithm === "upsale") {
+            similarEl.innerHTML = '<p style="text-align:center; color: #9ca3af; padding: 20px;">Không tìm thấy sản phẩm nâng cấp</p>';
+        } else {
+            similarEl.innerHTML = '<p style="text-align:center; color: #9ca3af; padding: 20px;">Không tìm thấy sản phẩm tương tự</p>';
+        }
+        return;
+    }
+
+    similar.forEach((item) => {
+        const card = document.createElement("div");
+        card.className = "similar-card";
+        card.innerHTML = `
+            <div class="similar-card-header">
+                <div class="similar-thumb" style="${getThumbStyle(item.product)}">
+                    <span>${getInitials(item.product.name)}</span>
+                </div>
+                <div class="similar-main">
+                    <div class="similar-card-title">${item.product.name}</div>
+                </div>
+            </div>
+            <div class="similar-card-price">${formatPriceVND(item.product.price)}</div>
+            <div class="similar-card-rating">${formatRating(item.product.rating)}</div>
+            <div style="margin-top: 8px;">
+                <span class="similar-score">${(item.score * 100).toFixed(0)}% match</span>
+            </div>
+        `;
+        card.addEventListener("click", () => {
+            currentProductId = item.product.id;
+            renderProductList();
+            renderDetailAndSimilar();
+        });
+        similarEl.appendChild(card);
+    });
+}
+
+// ===== Cart Functions =====
+
+function addToCart(product) {
+    const existingItem = cart.find(item => item.id === product.id);
+    if (existingItem) {
+        existingItem.quantity++;
+    } else {
+        cart.push({ ...product, quantity: 1 });
+    }
+    updateCartCount();
+    showCartNotification();
+}
+
+function removeFromCart(productId) {
+    cart = cart.filter(item => item.id !== productId);
+    updateCartCount();
+    renderCartItems();
+}
+
+function updateCartCount() {
+    const countEl = document.getElementById('cart-count');
+    const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+    countEl.textContent = totalItems;
+}
+
+function renderCartItems() {
+    const cartItemsEl = document.getElementById('cart-items');
+    
+    if (cart.length === 0) {
+        cartItemsEl.innerHTML = '<p class="empty-cart">Giỏ hàng trống</p>';
+        return;
+    }
+
+    cartItemsEl.innerHTML = cart.map(item => `
+        <div class="cart-item">
+            <div class="cart-item-thumb" style="${getThumbStyle(item)}">
+                ${getInitials(item.name)}
+            </div>
+            <div class="cart-item-content">
+                <div class="cart-item-name">${item.name}</div>
+                <div class="cart-item-price">${formatPriceVND(item.price)} x ${item.quantity}</div>
+            </div>
+            <button class="cart-item-remove" data-product-id="${item.id}">
+                <i class="fas fa-trash"></i>
+            </button>
+        </div>
+    `).join('');
+
+    // Add remove handlers
+    document.querySelectorAll('.cart-item-remove').forEach(btn => {
+        btn.addEventListener('click', () => {
+            removeFromCart(parseInt(btn.dataset.productId));
+        });
+    });
+
+    updateCartTotal();
+}
+
+function updateCartTotal() {
+    const total = cart.reduce((sum, item) => {
+        const price = Number(item.price) || 0;
+        return sum + (price * item.quantity);
+    }, 0);
+    
+    const totalEl = document.getElementById('cart-total');
+    totalEl.textContent = `Tổng: ${total.toLocaleString('vi-VN', {style: 'currency', currency: 'VND'})}`;
+}
+
+function showCartNotification() {
+    // Simple notification - can be enhanced with a toast notification
+    console.log('Thêm vào giỏ hàng thành công!');
+}
+
+// ===== Algorithm 1: FBT =====
+
+function recommendByFbt(allProducts, target, k = 10) {
+    const key = String(target.id);
+    const list = fbtIndex.get(key) || [];
+    const recs = list.map((r) => ({ product: r.product, score: r.conf }));
+    return dedupeRecommendations(recs, k);
+}
+
+// ===== Algorithm 2: SIM =====
+
+function recommendBySim(allProducts, target, k = 6) {
+    const tCat1 = target.category_l1 || target.category || null;
+    const tCat2 = target.category_l2 || null;
+    const tCat3 = target.category_l3 || null;
+    const tPrice = Number(target.price) || 0;
+
+    const scored = [];
+    for (const p of allProducts) {
+        if (p.id === target.id) continue;
+        if (p.sale_status !== undefined && p.sale_status !== 1) continue;
+
+        const cat1 = p.category_l1 || p.category || null;
+        const cat2 = p.category_l2 || null;
+        const cat3 = p.category_l3 || null;
+
+        let c_s = 0;
+        let sameCat = "None";
+        if (tCat3 && cat3 && tCat3 === cat3) {
+            c_s = 10;
+            sameCat = "L3";
+        } else if (tCat2 && cat2 && tCat2 === cat2) {
+            c_s = 7;
+            sameCat = "L2";
+        } else if (tCat1 && cat1 && tCat1 === cat1) {
+            c_s = 5;
+            sameCat = "L1";
+        }
+
+        const price = Number(p.price) || 0;
+        let p_diff = 1e9;
+        if (tPrice > 0 && price > 0) {
+            p_diff = Math.abs(price - tPrice) / tPrice;
+        }
+
+        let p_s = 0;
+        if (p_diff <= 0.2) p_s = 5;
+        else if (p_diff <= 0.5) p_s = 3;
+        else if (p_diff <= 1.0) p_s = 2;
+
+        const sc = (c_s + p_s) / 15.0;
+        if (sc <= 0) continue;
+
+        scored.push({ product: p, score: sc, sameCategory: sameCat, priceDiff: p_diff });
+    }
+
+    scored.sort((a, b) => b.score - a.score);
+    return dedupeRecommendations(scored, k);
+}
+
+// ===== Algorithm 3: UPSALE =====
+
+function recommendByUpsale(allProducts, target, k = 6) {
+    const key = String(target.id);
+    const list = fbtIndex.get(key) || [];
+    if (!list.length) return [];
+
+    const isDiaperTarget =
+        (target.category_l1 && target.category_l1.includes("Tã")) ||
+        (target.category && target.category.includes("Tã"));
+
+    const tCat2 = target.category_l2 || null;
+    const tCat3 = target.category_l3 || null;
+
+    const tRank = isDiaperTarget ? getSizeRank(target.size) : null;
+
+    const scored = [];
+    for (const row of list) {
+        const p = row.product;
+        if (!p) continue;
+        if (p.sale_status !== undefined && p.sale_status !== 1) continue;
+
+        const baseCoBuy = Number(row.cnt ?? 0) || 0;
+        if (baseCoBuy <= 0) continue;
+
+        const cat2 = p.category_l2 || null;
+        const cat3 = p.category_l3 || null;
+        if (tCat3 && cat3 && tCat3 !== cat3 && !(tCat2 && cat2 && tCat2 === cat2)) {
+            continue;
+        }
+        if (!tCat3 && tCat2 && cat2 && tCat2 !== cat2) {
+            continue;
+        }
+
+        let score = baseCoBuy;
+        let upsaleScore = null;
+        let sizeDiff = null;
+
+        const isDiaperCandidate =
+            (p.category_l1 && p.category_l1.includes("Tã")) ||
+            (p.category && p.category.includes("Tã"));
+
+        if (isDiaperTarget && isDiaperCandidate && tRank !== null) {
+            const cRank = getSizeRank(p.size);
+            if (cRank !== null) {
+                const diff = cRank - tRank;
+                sizeDiff = diff;
+                if (diff > 0) {
+                    upsaleScore = diff / 6.0;
+                    score = baseCoBuy * upsaleScore;
+                }
+            }
+        } else {
+            upsaleScore = 1.0;
+        }
+
+        scored.push({
+            product: p,
+            score,
+            coBuy: baseCoBuy,
+            upsaleScore,
+            sizeDiff,
+        });
+    }
+
+    scored.sort((a, b) => b.score - a.score);
+    return dedupeRecommendations(scored, k);
+}
+
+// ===== Code viewer =====
+
+function showCode(fn) {
+    const codeEl = document.getElementById("code-view");
+    const code = fn.toString();
+    codeEl.textContent = code;
+    codeEl.classList.remove("language-python");
+    codeEl.classList.add("language-javascript");
+    if (window.hljs && typeof window.hljs.highlightElement === "function") {
+        window.hljs.highlightElement(codeEl);
+    }
+}
+
+async function showPythonSource() {
+    const codeEl = document.getElementById("code-view");
+    try {
+        const res = await fetch("recs_python.py");
+        if (!res.ok) throw new Error("Không đọc được recs_python.py");
+        const text = await res.text();
+        codeEl.textContent = text;
+        codeEl.classList.remove("language-javascript");
+        codeEl.classList.add("language-python");
+        if (window.hljs && typeof window.hljs.highlightElement === "function") {
+            window.hljs.highlightElement(codeEl);
+        }
+    } catch (err) {
+        console.error(err);
+        codeEl.textContent = `// Lỗi load recs_python.py: ${err.message}`;
+    }
+}
+
+// ===== Event wiring =====
+
+function setupEvents() {
+    // Search functionality
+    const searchInput = document.getElementById('search-input');
+    if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+            renderProductList(e.target.value);
+        });
+    }
+
+    // Recommendation algorithm switcher
+    document
+        .querySelectorAll('input[name="algo"]')
+        .forEach((radio) => {
+            radio.addEventListener("change", (e) => {
+                currentAlgorithm = e.target.value;
+                if (currentProductId != null) {
+                    renderDetailAndSimilar();
+                }
+            });
+        });
+
+    // Code panel toggler
+    const toggleBtn = document.getElementById("btn-toggle-code");
+    const codePanelContent = document.querySelector(".code-panel-content");
+    if (toggleBtn && codePanelContent) {
+        toggleBtn.addEventListener("click", () => {
+            const isHidden = codePanelContent.style.display === "none";
+            codePanelContent.style.display = isHidden ? "block" : "none";
+        });
+    }
+
+    const btnPython = document.getElementById("btn-code-python");
+    if (btnPython) {
+        btnPython.addEventListener("click", () => {
+            showPythonSource();
+        });
+    }
+
+    // Cart modal
+    const cartButton = document.getElementById('cart-button');
+    const cartModal = document.getElementById('cart-modal');
+    const modalClose = document.querySelector('.modal-close');
+
+    if (cartButton && cartModal) {
+        cartButton.addEventListener('click', () => {
+            cartModal.classList.add('show');
+            renderCartItems();
+        });
+    }
+
+    if (modalClose && cartModal) {
+        modalClose.addEventListener('click', () => {
+            cartModal.classList.remove('show');
+        });
+    }
+
+    // Close modal when clicking outside
+    if (cartModal) {
+        cartModal.addEventListener('click', (e) => {
+            if (e.target === cartModal) {
+                cartModal.classList.remove('show');
+            }
+        });
+    }
+}
+
+window.addEventListener("DOMContentLoaded", () => {
+    setupEvents();
+    loadProducts();
+});
 
 function buildFbtIndex() {
     fbtIndex = new Map();
