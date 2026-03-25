@@ -603,6 +603,230 @@ window.addEventListener("DOMContentLoaded", () => {
     loadProducts();
 });
 
+// ===== Forecast Dashboard (Backend API) =====
+
+const FORECAST_API_BASE = "http://127.0.0.1:8001";
+
+const forecastState = {
+    page: 1,
+    pageSize: 20,
+    totalPages: 0,
+    location: "",
+    mae: null,
+    loading: false,
+};
+
+function getForecastConnectionHint() {
+    return "Không kết nối được Forecast API (http://127.0.0.1:8001). Hãy chạy: python forecast_api.py";
+}
+
+function toForecastErrorMessage(err) {
+    if (err instanceof TypeError && String(err.message).toLowerCase().includes("failed to fetch")) {
+        return getForecastConnectionHint();
+    }
+    return err?.message || "Lỗi không xác định";
+}
+
+function setForecastStatus(message, isError = false) {
+    const statusEl = document.getElementById("forecast-status");
+    if (!statusEl) return;
+    statusEl.textContent = message;
+    statusEl.style.color = isError ? "#b91c1c" : "";
+}
+
+function setForecastLoading(loading) {
+    forecastState.loading = loading;
+    const runBtn = document.getElementById("btn-run-forecast");
+    if (runBtn) runBtn.disabled = loading;
+}
+
+function renderForecastRows(rows) {
+    const tbody = document.getElementById("forecast-table-body");
+    if (!tbody) return;
+
+    if (!Array.isArray(rows) || rows.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="3" class="forecast-empty">Không có dữ liệu</td></tr>';
+        return;
+    }
+
+    tbody.innerHTML = rows
+        .map(
+            (row) => `
+                <tr>
+                    <td>${row.location}</td>
+                    <td>${row.item_id}</td>
+                    <td>${row.qty}</td>
+                </tr>
+            `
+        )
+        .join("");
+}
+
+function renderForecastMeta(data) {
+    const maeEl = document.getElementById("forecast-mae");
+    const pageInfoEl = document.getElementById("forecast-page-info");
+    const prevBtn = document.getElementById("forecast-prev-page");
+    const nextBtn = document.getElementById("forecast-next-page");
+
+    if (maeEl && typeof data.mae === "number") {
+        forecastState.mae = data.mae;
+        maeEl.textContent = `MAE: ${data.mae.toFixed(4)}`;
+    }
+
+    forecastState.page = Number(data.page || 1);
+    forecastState.totalPages = Number(data.total_pages || 0);
+
+    if (pageInfoEl) {
+        pageInfoEl.textContent = `Trang ${forecastState.page}/${forecastState.totalPages}`;
+    }
+
+    if (prevBtn) {
+        prevBtn.disabled = forecastState.page <= 1 || forecastState.totalPages === 0 || forecastState.loading;
+    }
+    if (nextBtn) {
+        nextBtn.disabled =
+            forecastState.page >= forecastState.totalPages ||
+            forecastState.totalPages === 0 ||
+            forecastState.loading;
+    }
+}
+
+function populateForecastLocations(locations) {
+    const selectEl = document.getElementById("forecast-location-filter");
+    if (!selectEl) return;
+
+    const current = selectEl.value;
+    selectEl.innerHTML = '<option value="">Tất cả</option>';
+
+    (locations || []).forEach((loc) => {
+        const option = document.createElement("option");
+        option.value = loc;
+        option.textContent = loc;
+        selectEl.appendChild(option);
+    });
+
+    if (["", ...(locations || [])].includes(current)) {
+        selectEl.value = current;
+    }
+}
+
+async function fetchForecastPage() {
+    const query = new URLSearchParams({
+        page: String(forecastState.page),
+        page_size: String(forecastState.pageSize),
+    });
+    if (forecastState.location) query.set("location", forecastState.location);
+
+    setForecastLoading(true);
+    setForecastStatus("Đang tải dữ liệu forecast...");
+
+    try {
+        const res = await fetch(`${FORECAST_API_BASE}/api/forecast/results?${query.toString()}`);
+        const data = await res.json();
+        if (!res.ok) {
+            throw new Error(data.detail || "Không thể lấy dữ liệu forecast");
+        }
+
+        renderForecastRows(data.rows);
+        renderForecastMeta(data);
+        populateForecastLocations(data.locations);
+        setForecastStatus(`Đã tải ${data.rows.length}/${data.total_rows} dòng`);
+    } catch (err) {
+        renderForecastRows([]);
+        setForecastStatus(`Lỗi: ${toForecastErrorMessage(err)}`, true);
+    } finally {
+        setForecastLoading(false);
+    }
+}
+
+async function runForecastFromLocalData() {
+    setForecastLoading(true);
+    setForecastStatus("Đang chạy forecast từ dữ liệu local trong data/... có thể mất vài giây");
+
+    try {
+        const res = await fetch(`${FORECAST_API_BASE}/api/forecast/run`, {
+            method: "POST",
+        });
+        const data = await res.json();
+        if (!res.ok) {
+            throw new Error(data.detail || "Forecast run thất bại");
+        }
+
+        forecastState.page = 1;
+        forecastState.location = "";
+        const locationSelect = document.getElementById("forecast-location-filter");
+        if (locationSelect) locationSelect.value = "";
+
+        setForecastStatus(`Run thành công (${data.items_file}, ${data.transactions_file}). Tổng dòng: ${data.total_rows}`);
+        await fetchForecastPage();
+    } catch (err) {
+        setForecastStatus(`Lỗi: ${toForecastErrorMessage(err)}`, true);
+    } finally {
+        setForecastLoading(false);
+    }
+}
+
+async function checkForecastApiHealth() {
+    try {
+        const res = await fetch(`${FORECAST_API_BASE}/api/health`);
+        if (!res.ok) throw new Error("Forecast API phản hồi lỗi");
+        setForecastStatus("Forecast API đã sẵn sàng. Nhấn Run Forecast để chạy.");
+    } catch (_) {
+        setForecastStatus(getForecastConnectionHint(), true);
+    }
+}
+
+function setupForecastEvents() {
+    const runBtn = document.getElementById("btn-run-forecast");
+    const prevBtn = document.getElementById("forecast-prev-page");
+    const nextBtn = document.getElementById("forecast-next-page");
+    const pageSizeEl = document.getElementById("forecast-page-size");
+    const locationEl = document.getElementById("forecast-location-filter");
+
+    if (runBtn) {
+        runBtn.addEventListener("click", runForecastFromLocalData);
+    }
+
+    if (prevBtn) {
+        prevBtn.addEventListener("click", async () => {
+            if (forecastState.page > 1) {
+                forecastState.page -= 1;
+                await fetchForecastPage();
+            }
+        });
+    }
+
+    if (nextBtn) {
+        nextBtn.addEventListener("click", async () => {
+            if (forecastState.page < forecastState.totalPages) {
+                forecastState.page += 1;
+                await fetchForecastPage();
+            }
+        });
+    }
+
+    if (pageSizeEl) {
+        pageSizeEl.addEventListener("change", async (event) => {
+            forecastState.pageSize = Number(event.target.value || 20);
+            forecastState.page = 1;
+            await fetchForecastPage();
+        });
+    }
+
+    if (locationEl) {
+        locationEl.addEventListener("change", async (event) => {
+            forecastState.location = event.target.value;
+            forecastState.page = 1;
+            await fetchForecastPage();
+        });
+    }
+}
+
+window.addEventListener("DOMContentLoaded", () => {
+    setupForecastEvents();
+    checkForecastApiHealth();
+});
+
 function buildFbtIndex() {
     fbtIndex = new Map();
     if (!Array.isArray(fbtRows) || fbtRows.length === 0) return;

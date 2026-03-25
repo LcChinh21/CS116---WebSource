@@ -62,6 +62,35 @@ python -m http.server 8000
 npx http-server
 ```
 
+### Chạy Forecast Backend (mới)
+```bash
+# Cài dependencies (1 lần)
+pip install fastapi uvicorn python-multipart polars
+
+# Chạy API
+python forecast_api.py
+
+# API chạy tại
+http://127.0.0.1:8001
+```
+
+Sau đó chạy web static như bình thường (`python -m http.server 8000`) và mở trang chính.
+Trong phần `Sales Forecast Dashboard`, nhấn `Run Forecast` để chạy trực tiếp từ data local.
+API sẽ tự chọn file parquet mới nhất theo thời gian sửa:
+- `data/items*.parquet`
+- `data/transactions*.parquet`
+
+Ví dụ hiện tại sẽ dùng:
+- `data/items (3).parquet`
+- `data/transactions-2025-12 (1).parquet`
+
+Kết quả hiển thị bảng 3 cột:
+- `location`
+- `item_id`
+- `qty`
+
+Kết quả được phân trang để tránh treo trình duyệt với dữ liệu lớn.
+
 ---
 
 ## 📁 Cấu trúc Thư mục

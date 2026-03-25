@@ -86,6 +86,63 @@
 </code></pre>
             </div>
         </section>
+
+        <section class="panel forecast-panel" id="forecast-panel">
+            <div class="forecast-panel-header">
+                <h3><i class="fas fa-chart-line"></i> Sales Forecast Dashboard</h3>
+                <p>Dùng dữ liệu local trong <strong>data/</strong> để visualize bảng 3 cột: <strong>location</strong>, <strong>item_id</strong>, <strong>qty</strong></p>
+            </div>
+
+            <div class="forecast-controls">
+                <button id="btn-run-forecast" class="btn-run-forecast">
+                    <i class="fas fa-rocket"></i> Run Forecast
+                </button>
+            </div>
+
+            <div class="forecast-meta">
+                <div id="forecast-status" class="forecast-status">Chưa chạy forecast</div>
+                <div class="forecast-meta-right">
+                    <label for="forecast-location-filter">Location</label>
+                    <select id="forecast-location-filter">
+                        <option value="">Tất cả</option>
+                    </select>
+                    <label for="forecast-page-size">Rows/trang</label>
+                    <select id="forecast-page-size">
+                        <option value="20" selected>20</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                    </select>
+                    <span id="forecast-mae" class="forecast-mae">MAE: -</span>
+                </div>
+            </div>
+
+            <div class="forecast-table-wrap">
+                <table class="forecast-table">
+                    <thead>
+                        <tr>
+                            <th>location</th>
+                            <th>item_id</th>
+                            <th>qty</th>
+                        </tr>
+                    </thead>
+                    <tbody id="forecast-table-body">
+                        <tr>
+                            <td colspan="3" class="forecast-empty">Nhấn Run Forecast để chạy từ data local</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="forecast-pagination">
+                <button id="forecast-prev-page" class="forecast-page-btn" disabled>
+                    <i class="fas fa-chevron-left"></i> Trước
+                </button>
+                <span id="forecast-page-info">Trang 0/0</span>
+                <button id="forecast-next-page" class="forecast-page-btn" disabled>
+                    Sau <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </section>
     </main>
 
     <footer class="footer">
