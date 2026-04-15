@@ -1,5 +1,4 @@
 # 🛍️ Smart Product Recommendation Engine
-abc
 Một ứng dụng web hiện đại giới thiệu hệ thống gợi ý sản phẩm thông minh cho cửa hàng bán hàng trực tuyến. Ứng dụng hỗ trợ 3 giải pháp khuyến nghị khác nhau với giao diện người dùng sạch sẽ, dễ sử dụng và fully responsive.
 
 ## ✨ Tính năng chính
@@ -103,6 +102,7 @@ SourceWeb/
 ├── recs_python.py            # Thuật toán khuyến nghị (Python)
 ├── build_fbt_json.py         # Script tính toán FBT
 ├── build_popularity_json.py  # Script tính độ phổ biến
+├── build_category_graph.py   # Script đồ thị category cross-sell (PyVis)
 ├── convert_items_to_products.py # Script chuyển đổi dữ liệu
 ├── data/
 │   ├── products.json         # Danh sách sản phẩm (100+ items)
@@ -209,6 +209,49 @@ Upsale Score = Co-Buy Count × (Size Rank Diff / 6)
 - Khách mua Tã M (176 lần mua, 150 lần mua kèm Tã XL)
 - M = rank 2, XL = rank 4 (chênh 2 levels)
 - Score = 150 × (2/6) = 50 điểm
+
+---
+
+### 4️⃣ Category Graph Cho Cross-Sell Khác Chủng Loại
+
+**Mục tiêu:** Không chỉ gợi ý sản phẩm tương tự, mà gợi ý chèn sản phẩm khác chủng loại để tăng doanh thu giỏ hàng.
+
+**Định nghĩa đỉnh:**
+```
+category_node = category_l1 + " | " + category_l2
+```
+
+**Tiền xử lý:**
+- Gộp 2 tập giao dịch: `transactions-202411-to-202412.parquet` và `transactions-2025-12.parquet`
+- Loại trừ nhóm sữa/tã theo token category (`sua`, `ta`, `milk`, `diaper`)
+- Basket = (`customer_id`, `updated_date`), mỗi basket giữ category duy nhất
+
+**Trọng số cạnh mặc định (đang dùng trong script):**
+```
+weight = log(count(A,B)) * log(lift(A,B)) * [P(B|A) + P(A|B)]
+```
+
+Trong đó:
+```
+P(B|A) = count(A,B) / count(A)
+lift(A,B) = (count(A,B) * N_baskets) / (count(A) * count(B))
+```
+
+**Cài thư viện và chạy:**
+```bash
+pip install polars pyvis
+python build_category_graph.py --formula lift --min-cooccur 50
+```
+
+**Output:**
+- `data/category_graph_edges.parquet`: danh sách cạnh + metrics
+- `data/category_graph_recommendations.json`: top category đề xuất cho từng category nguồn
+- `data/category_graph.html`: đồ thị tương tác (PyVis)
+
+**Test nhanh trên tập con basket:**
+```bash
+python build_category_graph.py --max-baskets 5000 --min-cooccur 10 --formula lift
+```
 
 ---
 

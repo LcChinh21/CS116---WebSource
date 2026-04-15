@@ -737,6 +737,76 @@ body {
     cursor: not-allowed;
 }
 
+/* ===== CATEGORY GRAPH PANEL ===== */
+.category-graph-panel {
+    background: var(--bg-primary);
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-sm);
+    padding: 20px;
+}
+
+.category-graph-header h3 {
+    font-size: 18px;
+    margin-bottom: 6px;
+}
+
+.category-graph-status {
+    color: var(--text-secondary);
+    font-size: 13px;
+}
+
+.category-graph-actions {
+    margin-top: 10px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.category-graph-actions label {
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+.category-graph-select {
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 6px 10px;
+    background: #fff;
+    color: var(--text-primary);
+    font-size: 13px;
+}
+
+.category-graph-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--primary-color);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.category-graph-link:hover {
+    text-decoration: underline;
+}
+
+.category-graph-frame-wrap {
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    overflow: hidden;
+    background: #0f172a;
+}
+
+.category-graph-frame {
+    display: block;
+    width: 100%;
+    height: 980px;
+    border: 0;
+}
+
 /* ===== MODAL ===== */
 .modal {
     display: none;
@@ -945,6 +1015,10 @@ body {
 
     .forecast-file-group input[type="file"] {
         min-width: 100%;
+    }
+
+    .category-graph-frame {
+        height: 640px;
     }
 }
 

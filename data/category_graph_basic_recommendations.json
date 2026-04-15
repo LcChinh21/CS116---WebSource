@@ -1,0 +1,1064 @@
+{
+  "Babycare | Bé ngủ": [
+    {
+      "src": "Babycare | Bé ngủ",
+      "dst": "Babycare | Đồ dùng vệ sinh",
+      "weight": 3.826139,
+      "count_ab": 6631,
+      "lift": 2.506223,
+      "p_b_given_a": 0.376954
+    },
+    {
+      "src": "Babycare | Bé ngủ",
+      "dst": "Textile | Khăn em bé",
+      "weight": 3.790939,
+      "count_ab": 5445,
+      "lift": 5.680851,
+      "p_b_given_a": 0.309533
+    }
+  ],
+  "Babycare | Chăm sóc gia đình": [
+    {
+      "src": "Babycare | Chăm sóc gia đình",
+      "dst": "Đồ chơi & Sách | 1Y+",
+      "weight": 4.117346,
+      "count_ab": 8966,
+      "lift": 3.647633,
+      "p_b_given_a": 0.316999
+    },
+    {
+      "src": "Babycare | Chăm sóc gia đình",
+      "dst": "Đồ chơi & Sách | 0-1Y",
+      "weight": 2.758888,
+      "count_ab": 5439,
+      "lift": 3.460501,
+      "p_b_given_a": 0.1923
+    }
+  ],
+  "Babycare | Thiết bị điện gia dụng": [
+    {
+      "src": "Babycare | Thiết bị điện gia dụng",
+      "dst": "Babycare | Đồ dùng cho mẹ",
+      "weight": 2.855242,
+      "count_ab": 1653,
+      "lift": 9.779938,
+      "p_b_given_a": 0.318743
+    },
+    {
+      "src": "Babycare | Thiết bị điện gia dụng",
+      "dst": "Babycare | Đồ dùng ăn uống",
+      "weight": 0.712151,
+      "count_ab": 547,
+      "lift": 1.099596,
+      "p_b_given_a": 0.105476
+    }
+  ],
+  "Babycare | Đồ dùng cho mẹ": [
+    {
+      "src": "Babycare | Đồ dùng cho mẹ",
+      "dst": "Vệ sinh | Băng vệ sinh",
+      "weight": 4.406972,
+      "count_ab": 5495,
+      "lift": 8.912739,
+      "p_b_given_a": 0.221269
+    },
+    {
+      "src": "Babycare | Đồ dùng cho mẹ",
+      "dst": "Babycare | Đồ dùng vệ sinh",
+      "weight": 3.226619,
+      "count_ab": 7393,
+      "lift": 1.979271,
+      "p_b_given_a": 0.297697
+    }
+  ],
+  "Babycare | Đồ dùng ra ngoài": [
+    {
+      "src": "Babycare | Đồ dùng ra ngoài",
+      "dst": "Đồ chơi & Sách | 1Y+",
+      "weight": 0.670691,
+      "count_ab": 311,
+      "lift": 1.290517,
+      "p_b_given_a": 0.112153
+    },
+    {
+      "src": "Babycare | Đồ dùng ra ngoài",
+      "dst": "Babycare | Đồ dùng ăn uống",
+      "weight": 0.583107,
+      "count_ab": 277,
+      "lift": 1.041378,
+      "p_b_given_a": 0.099892
+    }
+  ],
+  "Babycare | Đồ dùng vệ sinh": [
+    {
+      "src": "Babycare | Đồ dùng vệ sinh",
+      "dst": "Hóa mỹ phẩm cho bé | Vệ sinh cho bé",
+      "weight": 6.306159,
+      "count_ab": 35746,
+      "lift": 21.587593,
+      "p_b_given_a": 0.311901
+    },
+    {
+      "src": "Babycare | Đồ dùng vệ sinh",
+      "dst": "Babycare | Bé ngủ",
+      "weight": 3.826139,
+      "count_ab": 6631,
+      "lift": 2.506223,
+      "p_b_given_a": 0.057859
+    }
+  ],
+  "Babycare | Đồ dùng ăn uống": [
+    {
+      "src": "Babycare | Đồ dùng ăn uống",
+      "dst": "Thực phẩm cho bé | Snack ăn dặm",
+      "weight": 3.307277,
+      "count_ab": 18485,
+      "lift": 4.33067,
+      "p_b_given_a": 0.252904
+    },
+    {
+      "src": "Babycare | Đồ dùng ăn uống",
+      "dst": "Thực phẩm cho bé | Bột ăn dặm",
+      "weight": 3.136215,
+      "count_ab": 6971,
+      "lift": 2.700297,
+      "p_b_given_a": 0.095374
+    }
+  ],
+  "Hóa mỹ phẩm cho bé | Chăm sóc da bé": [
+    {
+      "src": "Hóa mỹ phẩm cho bé | Chăm sóc da bé",
+      "dst": "Hóa mỹ phẩm cho bé | Vệ sinh cho bé",
+      "weight": 3.789105,
+      "count_ab": 10565,
+      "lift": 1.996156,
+      "p_b_given_a": 0.323366
+    },
+    {
+      "src": "Hóa mỹ phẩm cho bé | Chăm sóc da bé",
+      "dst": "Babycare | Đồ dùng vệ sinh",
+      "weight": 2.873921,
+      "count_ab": 8117,
+      "lift": 1.651776,
+      "p_b_given_a": 0.248439
+    }
+  ],
+  "Hóa mỹ phẩm cho bé | Chăm sóc sức khỏe bé": [
+    {
+      "src": "Hóa mỹ phẩm cho bé | Chăm sóc sức khỏe bé",
+      "dst": "Babycare | Đồ dùng vệ sinh",
+      "weight": 3.810423,
+      "count_ab": 13365,
+      "lift": 9.346284,
+      "p_b_given_a": 0.284465
+    },
+    {
+      "src": "Hóa mỹ phẩm cho bé | Chăm sóc sức khỏe bé",
+      "dst": "Hóa mỹ phẩm cho bé | Vệ sinh cho bé",
+      "weight": 3.610393,
+      "count_ab": 12973,
+      "lift": 6.570704,
+      "p_b_given_a": 0.276121
+    }
+  ],
+  "Hóa mỹ phẩm cho bé | Dầu sức khỏe": [
+    {
+      "src": "Hóa mỹ phẩm cho bé | Dầu sức khỏe",
+      "dst": "Hóa mỹ phẩm cho bé | Vệ sinh cho bé",
+      "weight": 3.591404,
+      "count_ab": 10938,
+      "lift": 34.380956,
+      "p_b_given_a": 0.29756
+    },
+    {
+      "src": "Hóa mỹ phẩm cho bé | Dầu sức khỏe",
+      "dst": "Babycare | Đồ dùng vệ sinh",
+      "weight": 3.36652,
+      "count_ab": 10156,
+      "lift": 1.83692,
+      "p_b_given_a": 0.276286
+    }
+  ],
+  "Hóa mỹ phẩm cho bé | Giặt xả cho bé": [
+    {
+      "src": "Hóa mỹ phẩm cho bé | Giặt xả cho bé",
+      "dst": "Hóa mỹ phẩm cho bé | Vệ sinh cho bé",
+      "weight": 2.733528,
+      "count_ab": 9763,
+      "lift": 6.092002,
+      "p_b_given_a": 0.21847
+    },
+    {
+      "src": "Hóa mỹ phẩm cho bé | Giặt xả cho bé",
+      "dst": "Babycare | Đồ dùng vệ sinh",
+      "weight": 2.353911,
+      "count_ab": 8378,
+      "lift": 7.723114,
+      "p_b_given_a": 0.187478
+    }
+  ],
+  "Hóa mỹ phẩm cho bé | Vệ sinh cho bé": [
+    {
+      "src": "Hóa mỹ phẩm cho bé | Vệ sinh cho bé",
+      "dst": "Babycare | Đồ dùng vệ sinh",
+      "weight": 6.306159,
+      "count_ab": 35746,
+      "lift": 21.587593,
+      "p_b_given_a": 0.289591
+    },
+    {
+      "src": "Hóa mỹ phẩm cho bé | Vệ sinh cho bé",
+      "dst": "Hóa mỹ phẩm cho bé | Chăm sóc da bé",
+      "weight": 3.789105,
+      "count_ab": 10565,
+      "lift": 1.996156,
+      "p_b_given_a": 0.085591
+    }
+  ],
+  "Hóa mỹ phẩm gia đình | Chăm sóc cơ thể": [
+    {
+      "src": "Hóa mỹ phẩm gia đình | Chăm sóc cơ thể",
+      "dst": "Hóa mỹ phẩm cho bé | Vệ sinh cho bé",
+      "weight": 2.190953,
+      "count_ab": 1349,
+      "lift": 1.809137,
+      "p_b_given_a": 0.29307
+    },
+    {
+      "src": "Hóa mỹ phẩm gia đình | Chăm sóc cơ thể",
+      "dst": "Babycare | Đồ dùng vệ sinh",
+      "weight": 1.447088,
+      "count_ab": 936,
+      "lift": 1.351967,
+      "p_b_given_a": 0.203346
+    }
+  ],
+  "Hóa mỹ phẩm gia đình | Chăm sóc mẹ trước & sau sinh": [
+    {
+      "src": "Hóa mỹ phẩm gia đình | Chăm sóc mẹ trước & sau sinh",
+      "dst": "Babycare | Đồ dùng vệ sinh",
+      "weight": 1.560635,
+      "count_ab": 389,
+      "lift": 1.717339,
+      "p_b_given_a": 0.2583
+    },
+    {
+      "src": "Hóa mỹ phẩm gia đình | Chăm sóc mẹ trước & sau sinh",
+      "dst": "Hóa mỹ phẩm cho bé | Vệ sinh cho bé",
+      "weight": 1.382626,
+      "count_ab": 351,
+      "lift": 1.438741,
+      "p_b_given_a": 0.233068
+    }
+  ],
+  "Hóa mỹ phẩm gia đình | Chăm sóc răng miệng": [
+    {
+      "src": "Hóa mỹ phẩm gia đình | Chăm sóc răng miệng",
+      "dst": "Hóa mỹ phẩm cho bé | Vệ sinh cho bé",
+      "weight": 0.801106,
+      "count_ab": 37,
+      "lift": 1.367684,
+      "p_b_given_a": 0.221557
+    },
+    {
+      "src": "Hóa mỹ phẩm gia đình | Chăm sóc răng miệng",
+      "dst": "Babycare | Đồ dùng vệ sinh",
+      "weight": 0.773621,
+      "count_ab": 36,
+      "lift": 1.433235,
+      "p_b_given_a": 0.215569
+    }
+  ],
+  "Hóa mỹ phẩm gia đình | Chăm sóc tóc": [
+    {
+      "src": "Hóa mỹ phẩm gia đình | Chăm sóc tóc",
+      "dst": "Hóa mỹ phẩm cho bé | Vệ sinh cho bé",
+      "weight": 1.333606,
+      "count_ab": 286,
+      "lift": 1.441221,
+      "p_b_given_a": 0.233469
+    },
+    {
+      "src": "Hóa mỹ phẩm gia đình | Chăm sóc tóc",
+      "dst": "Babycare | Đồ dùng vệ sinh",
+      "weight": 0.812223,
+      "count_ab": 188,
+      "lift": 1.020359,
+      "p_b_given_a": 0.153469
+    }
+  ],
+  "Hóa mỹ phẩm gia đình | Giặt xả gia đình": [
+    {
+      "src": "Hóa mỹ phẩm gia đình | Giặt xả gia đình",
+      "dst": "Hóa mỹ phẩm cho bé | Giặt xả cho bé",
+      "weight": 1.085144,
+      "count_ab": 191,
+      "lift": 3.449951,
+      "p_b_given_a": 0.202331
+    },
+    {
+      "src": "Hóa mỹ phẩm gia đình | Giặt xả gia đình",
+      "dst": "Thực phẩm cho bé | Bánh & Kẹo cho bé",
+      "weight": 1.003974,
+      "count_ab": 181,
+      "lift": 1.122401,
+      "p_b_given_a": 0.191737
+    }
+  ],
+  "Hóa mỹ phẩm gia đình | Kế hoạch gia đình": [
+    {
+      "src": "Hóa mỹ phẩm gia đình | Kế hoạch gia đình",
+      "dst": "Thực phẩm cho gia đình | Kẹo",
+      "weight": 0.280197,
+      "count_ab": 103,
+      "lift": 1.381582,
+      "p_b_given_a": 0.05719
+    },
+    {
+      "src": "Hóa mỹ phẩm gia đình | Kế hoạch gia đình",
+      "dst": "Thực phẩm cho gia đình | Đồ uống",
+      "weight": 0.265706,
+      "count_ab": 98,
+      "lift": 1.496623,
+      "p_b_given_a": 0.054414
+    }
+  ],
+  "Hóa mỹ phẩm gia đình | Sức khỏe gia đình": [
+    {
+      "src": "Hóa mỹ phẩm gia đình | Sức khỏe gia đình",
+      "dst": "TPCN | TPCN cho bé",
+      "weight": 0.856462,
+      "count_ab": 27,
+      "lift": 1.805482,
+      "p_b_given_a": 0.259615
+    },
+    {
+      "src": "Hóa mỹ phẩm gia đình | Sức khỏe gia đình",
+      "dst": "Babycare | Đồ dùng vệ sinh",
+      "weight": 0.77447,
+      "count_ab": 25,
+      "lift": 1.598225,
+      "p_b_given_a": 0.240385
+    }
+  ],
+  "Phụ kiện | Giày dép 1-3Y": [
+    {
+      "src": "Phụ kiện | Giày dép 1-3Y",
+      "dst": "Thời trang | Thời trang bé trai",
+      "weight": 1.31095,
+      "count_ab": 1553,
+      "lift": 3.825769,
+      "p_b_given_a": 0.101863
+    },
+    {
+      "src": "Phụ kiện | Giày dép 1-3Y",
+      "dst": "Phụ kiện | Nón",
+      "weight": 1.226504,
+      "count_ab": 1520,
+      "lift": 3.384021,
+      "p_b_given_a": 0.099698
+    }
+  ],
+  "Phụ kiện | Giày tập đi": [
+    {
+      "src": "Phụ kiện | Giày tập đi",
+      "dst": "Phụ kiện | Nón",
+      "weight": 2.639609,
+      "count_ab": 3453,
+      "lift": 5.776436,
+      "p_b_given_a": 0.170182
+    },
+    {
+      "src": "Phụ kiện | Giày tập đi",
+      "dst": "Thực phẩm cho bé | Snack ăn dặm",
+      "weight": 2.277925,
+      "count_ab": 4973,
+      "lift": 20.511612,
+      "p_b_given_a": 0.245096
+    }
+  ],
+  "Phụ kiện | Nón": [
+    {
+      "src": "Phụ kiện | Nón",
+      "dst": "Phụ kiện | Giày tập đi",
+      "weight": 2.639609,
+      "count_ab": 3453,
+      "lift": 5.776436,
+      "p_b_given_a": 0.153815
+    },
+    {
+      "src": "Phụ kiện | Nón",
+      "dst": "Thực phẩm cho bé | Snack ăn dặm",
+      "weight": 1.560746,
+      "count_ab": 3852,
+      "lift": 4.437682,
+      "p_b_given_a": 0.171589
+    }
+  ],
+  "Phụ kiện | Phụ kiện khác": [
+    {
+      "src": "Phụ kiện | Phụ kiện khác",
+      "dst": "Thực phẩm cho bé | Bánh & Kẹo cho bé",
+      "weight": 0.911995,
+      "count_ab": 120,
+      "lift": 1.109734,
+      "p_b_given_a": 0.189573
+    },
+    {
+      "src": "Phụ kiện | Phụ kiện khác",
+      "dst": "Thời trang | Thời trang bé gái",
+      "weight": 0.686659,
+      "count_ab": 92,
+      "lift": 7.84373,
+      "p_b_given_a": 0.14534
+    }
+  ],
+  "TPCN | TPCN cho bé": [
+    {
+      "src": "TPCN | TPCN cho bé",
+      "dst": "Thực phẩm cho bé | Snack ăn dặm",
+      "weight": 3.415657,
+      "count_ab": 24726,
+      "lift": 6.937418,
+      "p_b_given_a": 0.22567
+    },
+    {
+      "src": "TPCN | TPCN cho bé",
+      "dst": "Babycare | Đồ dùng vệ sinh",
+      "weight": 2.857859,
+      "count_ab": 16486,
+      "lift": 3.166449,
+      "p_b_given_a": 0.150465
+    }
+  ],
+  "TPCN | TPCN cho gia đình": [
+    {
+      "src": "TPCN | TPCN cho gia đình",
+      "dst": "TPCN | TPCN cho mẹ",
+      "weight": 2.138491,
+      "count_ab": 126,
+      "lift": 49.497406,
+      "p_b_given_a": 0.422819
+    },
+    {
+      "src": "TPCN | TPCN cho gia đình",
+      "dst": "TPCN | TPCN cho bé",
+      "weight": 1.018367,
+      "count_ab": 71,
+      "lift": 1.656932,
+      "p_b_given_a": 0.238255
+    }
+  ],
+  "TPCN | TPCN cho mẹ": [
+    {
+      "src": "TPCN | TPCN cho mẹ",
+      "dst": "TPCN | TPCN cho bé",
+      "weight": 2.377854,
+      "count_ab": 1931,
+      "lift": 2.063149,
+      "p_b_given_a": 0.296666
+    },
+    {
+      "src": "TPCN | TPCN cho mẹ",
+      "dst": "TPCN | TPCN cho gia đình",
+      "weight": 2.138491,
+      "count_ab": 126,
+      "lift": 49.497406,
+      "p_b_given_a": 0.019358
+    }
+  ],
+  "Textile | Chăn": [
+    {
+      "src": "Textile | Chăn",
+      "dst": "Textile | Khăn em bé",
+      "weight": 4.469087,
+      "count_ab": 3432,
+      "lift": 8.558063,
+      "p_b_given_a": 0.466304
+    },
+    {
+      "src": "Textile | Chăn",
+      "dst": "Thời trang | Quần áo & Phụ kiện sơ sinh",
+      "weight": 3.637409,
+      "count_ab": 2782,
+      "lift": 8.349356,
+      "p_b_given_a": 0.377989
+    }
+  ],
+  "Textile | Gối": [
+    {
+      "src": "Textile | Gối",
+      "dst": "Textile | Chăn",
+      "weight": 3.137323,
+      "count_ab": 2004,
+      "lift": 14.532,
+      "p_b_given_a": 0.140366
+    },
+    {
+      "src": "Textile | Gối",
+      "dst": "Textile | Khăn em bé",
+      "weight": 3.020638,
+      "count_ab": 3883,
+      "lift": 4.991562,
+      "p_b_given_a": 0.271976
+    }
+  ],
+  "Textile | Khăn em bé": [
+    {
+      "src": "Textile | Khăn em bé",
+      "dst": "Thời trang | Quần áo & Phụ kiện sơ sinh",
+      "weight": 5.680569,
+      "count_ab": 11452,
+      "lift": 6.092824,
+      "p_b_given_a": 0.275832
+    },
+    {
+      "src": "Textile | Khăn em bé",
+      "dst": "Textile | Chăn",
+      "weight": 4.469087,
+      "count_ab": 3432,
+      "lift": 8.558063,
+      "p_b_given_a": 0.082663
+    }
+  ],
+  "Textile | Khăn gia đình": [
+    {
+      "src": "Textile | Khăn gia đình",
+      "dst": "Textile | Khăn em bé",
+      "weight": 1.976674,
+      "count_ab": 2142,
+      "lift": 3.783277,
+      "p_b_given_a": 0.20614
+    },
+    {
+      "src": "Textile | Khăn gia đình",
+      "dst": "Babycare | Đồ dùng vệ sinh",
+      "weight": 1.648975,
+      "count_ab": 2059,
+      "lift": 1.317438,
+      "p_b_given_a": 0.198152
+    }
+  ],
+  "Textile | Đồ dùng bé ngủ ngon": [
+    {
+      "src": "Textile | Đồ dùng bé ngủ ngon",
+      "dst": "Babycare | Đồ dùng vệ sinh",
+      "weight": 2.466271,
+      "count_ab": 773,
+      "lift": 2.42081,
+      "p_b_given_a": 0.364107
+    },
+    {
+      "src": "Textile | Đồ dùng bé ngủ ngon",
+      "dst": "Textile | Khăn em bé",
+      "weight": 1.900339,
+      "count_ab": 600,
+      "lift": 5.186893,
+      "p_b_given_a": 0.282619
+    }
+  ],
+  "Thời trang | Cho mẹ": [
+    {
+      "src": "Thời trang | Cho mẹ",
+      "dst": "Babycare | Đồ dùng vệ sinh",
+      "weight": 1.742661,
+      "count_ab": 548,
+      "lift": 1.805472,
+      "p_b_given_a": 0.271556
+    },
+    {
+      "src": "Thời trang | Cho mẹ",
+      "dst": "Thời trang | Quần áo & Phụ kiện sơ sinh",
+      "weight": 1.626087,
+      "count_ab": 499,
+      "lift": 5.462017,
+      "p_b_given_a": 0.247275
+    }
+  ],
+  "Thời trang | Modal kháng khuẩn": [
+    {
+      "src": "Thời trang | Modal kháng khuẩn",
+      "dst": "Thời trang | Quần áo & Phụ kiện sơ sinh",
+      "weight": 3.467342,
+      "count_ab": 3230,
+      "lift": 7.410374,
+      "p_b_given_a": 0.33548
+    },
+    {
+      "src": "Thời trang | Modal kháng khuẩn",
+      "dst": "Textile | Khăn em bé",
+      "weight": 1.390828,
+      "count_ab": 1488,
+      "lift": 2.836435,
+      "p_b_given_a": 0.154549
+    }
+  ],
+  "Thời trang | Quần áo & Phụ kiện sơ sinh": [
+    {
+      "src": "Thời trang | Quần áo & Phụ kiện sơ sinh",
+      "dst": "Textile | Khăn em bé",
+      "weight": 5.680569,
+      "count_ab": 11452,
+      "lift": 6.092824,
+      "p_b_given_a": 0.331981
+    },
+    {
+      "src": "Thời trang | Quần áo & Phụ kiện sơ sinh",
+      "dst": "Textile | Chăn",
+      "weight": 3.637409,
+      "count_ab": 2782,
+      "lift": 8.349356,
+      "p_b_given_a": 0.080647
+    }
+  ],
+  "Thời trang | Thời trang bé gái": [
+    {
+      "src": "Thời trang | Thời trang bé gái",
+      "dst": "Thời trang | Thời trang bé trai",
+      "weight": 2.279649,
+      "count_ab": 2434,
+      "lift": 6.474703,
+      "p_b_given_a": 0.172392
+    },
+    {
+      "src": "Thời trang | Thời trang bé gái",
+      "dst": "Phụ kiện | Nón",
+      "weight": 1.28673,
+      "count_ab": 1522,
+      "lift": 3.658947,
+      "p_b_given_a": 0.107798
+    }
+  ],
+  "Thời trang | Thời trang bé trai": [
+    {
+      "src": "Thời trang | Thời trang bé trai",
+      "dst": "Thời trang | Thời trang bé gái",
+      "weight": 2.279649,
+      "count_ab": 2434,
+      "lift": 6.474703,
+      "p_b_given_a": 0.119972
+    },
+    {
+      "src": "Thời trang | Thời trang bé trai",
+      "dst": "Thực phẩm cho bé | Snack ăn dặm",
+      "weight": 1.438894,
+      "count_ab": 3300,
+      "lift": 13.643776,
+      "p_b_given_a": 0.162658
+    }
+  ],
+  "Thời trang | Thời trang đông": [
+    {
+      "src": "Thời trang | Thời trang đông",
+      "dst": "Thời trang | Thời trang bé trai",
+      "weight": 1.418101,
+      "count_ab": 614,
+      "lift": 7.159469,
+      "p_b_given_a": 0.190624
+    },
+    {
+      "src": "Thời trang | Thời trang đông",
+      "dst": "Thời trang | Quần áo & Phụ kiện sơ sinh",
+      "weight": 1.09897,
+      "count_ab": 518,
+      "lift": 3.552325,
+      "p_b_given_a": 0.16082
+    }
+  ],
+  "Thực phẩm cho bé | Bánh & Kẹo cho bé": [
+    {
+      "src": "Thực phẩm cho bé | Bánh & Kẹo cho bé",
+      "dst": "Thực phẩm cho bé | Snack ăn dặm",
+      "weight": 4.563393,
+      "count_ab": 35652,
+      "lift": 9.149935,
+      "p_b_given_a": 0.273894
+    },
+    {
+      "src": "Thực phẩm cho bé | Bánh & Kẹo cho bé",
+      "dst": "Thực phẩm cho gia đình | Kẹo",
+      "weight": 4.002846,
+      "count_ab": 10929,
+      "lift": 2.028303,
+      "p_b_given_a": 0.083961
+    }
+  ],
+  "Thực phẩm cho bé | Bột ăn dặm": [
+    {
+      "src": "Thực phẩm cho bé | Bột ăn dặm",
+      "dst": "Babycare | Đồ dùng ăn uống",
+      "weight": 3.136215,
+      "count_ab": 6971,
+      "lift": 2.700297,
+      "p_b_given_a": 0.25902
+    },
+    {
+      "src": "Thực phẩm cho bé | Bột ăn dặm",
+      "dst": "Thực phẩm cho bé | Snack ăn dặm",
+      "weight": 3.009204,
+      "count_ab": 8029,
+      "lift": 3.714602,
+      "p_b_given_a": 0.298332
+    }
+  ],
+  "Thực phẩm cho bé | Cháo ăn dặm": [
+    {
+      "src": "Thực phẩm cho bé | Cháo ăn dặm",
+      "dst": "Thực phẩm cho bé | Snack ăn dặm",
+      "weight": 4.280703,
+      "count_ab": 18459,
+      "lift": 4.715677,
+      "p_b_given_a": 0.352163
+    },
+    {
+      "src": "Thực phẩm cho bé | Cháo ăn dặm",
+      "dst": "Thực phẩm cho bé | Mì & Đồ khô ăn liền",
+      "weight": 2.696995,
+      "count_ab": 10493,
+      "lift": 4.591202,
+      "p_b_given_a": 0.200187
+    }
+  ],
+  "Thực phẩm cho bé | Dầu ăn & Gia vị": [
+    {
+      "src": "Thực phẩm cho bé | Dầu ăn & Gia vị",
+      "dst": "Thực phẩm cho bé | Mì & Đồ khô ăn liền",
+      "weight": 6.946096,
+      "count_ab": 40896,
+      "lift": 10.874393,
+      "p_b_given_a": 0.299022
+    },
+    {
+      "src": "Thực phẩm cho bé | Dầu ăn & Gia vị",
+      "dst": "Thực phẩm cho bé | Snack ăn dặm",
+      "weight": 6.682342,
+      "count_ab": 51972,
+      "lift": 302.362914,
+      "p_b_given_a": 0.380007
+    }
+  ],
+  "Thực phẩm cho bé | Mì & Đồ khô ăn liền": [
+    {
+      "src": "Thực phẩm cho bé | Mì & Đồ khô ăn liền",
+      "dst": "Thực phẩm cho bé | Dầu ăn & Gia vị",
+      "weight": 6.946096,
+      "count_ab": 40896,
+      "lift": 10.874393,
+      "p_b_given_a": 0.355111
+    },
+    {
+      "src": "Thực phẩm cho bé | Mì & Đồ khô ăn liền",
+      "dst": "Thực phẩm cho bé | Snack ăn dặm",
+      "weight": 6.146933,
+      "count_ab": 43554,
+      "lift": 8.398563,
+      "p_b_given_a": 0.378191
+    }
+  ],
+  "Thực phẩm cho bé | Snack ăn dặm": [
+    {
+      "src": "Thực phẩm cho bé | Snack ăn dặm",
+      "dst": "Thực phẩm cho bé | Dầu ăn & Gia vị",
+      "weight": 6.682342,
+      "count_ab": 51972,
+      "lift": 302.362914,
+      "p_b_given_a": 0.235397
+    },
+    {
+      "src": "Thực phẩm cho bé | Snack ăn dặm",
+      "dst": "Thực phẩm cho bé | Mì & Đồ khô ăn liền",
+      "weight": 6.146933,
+      "count_ab": 43554,
+      "lift": 8.398563,
+      "p_b_given_a": 0.19727
+    }
+  ],
+  "Thực phẩm cho bé | Thức ăn nghiền cho bé": [
+    {
+      "src": "Thực phẩm cho bé | Thức ăn nghiền cho bé",
+      "dst": "Thực phẩm cho bé | Snack ăn dặm",
+      "weight": 3.913603,
+      "count_ab": 5051,
+      "lift": 1.504981,
+      "p_b_given_a": 0.43607
+    },
+    {
+      "src": "Thực phẩm cho bé | Thức ăn nghiền cho bé",
+      "dst": "Thực phẩm cho bé | Dầu ăn & Gia vị",
+      "weight": 1.632873,
+      "count_ab": 2258,
+      "lift": 1.086093,
+      "p_b_given_a": 0.194941
+    }
+  ],
+  "Thực phẩm cho bé | Đồ uống": [
+    {
+      "src": "Thực phẩm cho bé | Đồ uống",
+      "dst": "Thực phẩm cho bé | Bánh & Kẹo cho bé",
+      "weight": 3.455911,
+      "count_ab": 13544,
+      "lift": 4.117356,
+      "p_b_given_a": 0.259205
+    },
+    {
+      "src": "Thực phẩm cho bé | Đồ uống",
+      "dst": "Thực phẩm cho bé | Snack ăn dặm",
+      "weight": 3.449652,
+      "count_ab": 15143,
+      "lift": 3.916086,
+      "p_b_given_a": 0.289807
+    }
+  ],
+  "Thực phẩm cho gia đình | Bánh": [
+    {
+      "src": "Thực phẩm cho gia đình | Bánh",
+      "dst": "Thực phẩm cho bé | Bánh & Kẹo cho bé",
+      "weight": 3.674305,
+      "count_ab": 6418,
+      "lift": 2.164794,
+      "p_b_given_a": 0.369807
+    },
+    {
+      "src": "Thực phẩm cho gia đình | Bánh",
+      "dst": "Thực phẩm cho bé | Snack ăn dặm",
+      "weight": 2.821126,
+      "count_ab": 5294,
+      "lift": 1.052772,
+      "p_b_given_a": 0.305042
+    }
+  ],
+  "Thực phẩm cho gia đình | Dầu ăn & Gia vị": [
+    {
+      "src": "Thực phẩm cho gia đình | Dầu ăn & Gia vị",
+      "dst": "Thực phẩm cho bé | Dầu ăn & Gia vị",
+      "weight": 1.782989,
+      "count_ab": 107,
+      "lift": 2.121494,
+      "p_b_given_a": 0.380783
+    },
+    {
+      "src": "Thực phẩm cho gia đình | Dầu ăn & Gia vị",
+      "dst": "Thực phẩm cho bé | Bánh & Kẹo cho bé",
+      "weight": 0.986171,
+      "count_ab": 66,
+      "lift": 1.374925,
+      "p_b_given_a": 0.234875
+    }
+  ],
+  "Thực phẩm cho gia đình | Kẹo": [
+    {
+      "src": "Thực phẩm cho gia đình | Kẹo",
+      "dst": "Thực phẩm cho bé | Bánh & Kẹo cho bé",
+      "weight": 4.002846,
+      "count_ab": 10929,
+      "lift": 2.028303,
+      "p_b_given_a": 0.34649
+    },
+    {
+      "src": "Thực phẩm cho gia đình | Kẹo",
+      "dst": "Thực phẩm cho bé | Snack ăn dặm",
+      "weight": 1.895479,
+      "count_ab": 6012,
+      "lift": 1.716377,
+      "p_b_given_a": 0.190603
+    }
+  ],
+  "Thực phẩm cho gia đình | Mì & Đồ khô ăn liền": [
+    {
+      "src": "Thực phẩm cho gia đình | Mì & Đồ khô ăn liền",
+      "dst": "Thực phẩm cho bé | Dầu ăn & Gia vị",
+      "weight": 2.689153,
+      "count_ab": 3157,
+      "lift": 1.730851,
+      "p_b_given_a": 0.310667
+    },
+    {
+      "src": "Thực phẩm cho gia đình | Mì & Đồ khô ăn liền",
+      "dst": "Thực phẩm cho bé | Snack ăn dặm",
+      "weight": 2.428875,
+      "count_ab": 2953,
+      "lift": 1.002903,
+      "p_b_given_a": 0.290592
+    }
+  ],
+  "Thực phẩm cho gia đình | Snack": [
+    {
+      "src": "Thực phẩm cho gia đình | Snack",
+      "dst": "Thực phẩm cho bé | Bánh & Kẹo cho bé",
+      "weight": 3.653686,
+      "count_ab": 4204,
+      "lift": 2.374296,
+      "p_b_given_a": 0.405596
+    },
+    {
+      "src": "Thực phẩm cho gia đình | Snack",
+      "dst": "Thực phẩm cho bé | Mì & Đồ khô ăn liền",
+      "weight": 1.466272,
+      "count_ab": 1853,
+      "lift": 1.182856,
+      "p_b_given_a": 0.178775
+    }
+  ],
+  "Thực phẩm cho gia đình | Đồ uống": [
+    {
+      "src": "Thực phẩm cho gia đình | Đồ uống",
+      "dst": "Thực phẩm cho bé | Bánh & Kẹo cho bé",
+      "weight": 3.41173,
+      "count_ab": 8602,
+      "lift": 1.817601,
+      "p_b_given_a": 0.310497
+    },
+    {
+      "src": "Thực phẩm cho gia đình | Đồ uống",
+      "dst": "Thực phẩm cho bé | Đồ uống",
+      "weight": 2.230012,
+      "count_ab": 4767,
+      "lift": 2.50924,
+      "p_b_given_a": 0.172069
+    }
+  ],
+  "Vệ sinh | Bông tẩy trang": [
+    {
+      "src": "Vệ sinh | Bông tẩy trang",
+      "dst": "Babycare | Đồ dùng vệ sinh",
+      "weight": 1.217119,
+      "count_ab": 746,
+      "lift": 1.180078,
+      "p_b_given_a": 0.177492
+    },
+    {
+      "src": "Vệ sinh | Bông tẩy trang",
+      "dst": "Hóa mỹ phẩm cho bé | Vệ sinh cho bé",
+      "weight": 1.204677,
+      "count_ab": 741,
+      "lift": 1.088327,
+      "p_b_given_a": 0.176303
+    }
+  ],
+  "Vệ sinh | Băng vệ sinh": [
+    {
+      "src": "Vệ sinh | Băng vệ sinh",
+      "dst": "Babycare | Đồ dùng cho mẹ",
+      "weight": 4.406972,
+      "count_ab": 5495,
+      "lift": 8.912739,
+      "p_b_given_a": 0.290479
+    },
+    {
+      "src": "Vệ sinh | Băng vệ sinh",
+      "dst": "Babycare | Đồ dùng vệ sinh",
+      "weight": 3.153835,
+      "count_ab": 5898,
+      "lift": 2.072926,
+      "p_b_given_a": 0.311783
+    }
+  ],
+  "Vệ sinh | Giấy": [
+    {
+      "src": "Vệ sinh | Giấy",
+      "dst": "Vệ sinh | Khăn ướt",
+      "weight": 3.640041,
+      "count_ab": 3393,
+      "lift": 3.122893,
+      "p_b_given_a": 0.414185
+    },
+    {
+      "src": "Vệ sinh | Giấy",
+      "dst": "Babycare | Đồ dùng vệ sinh",
+      "weight": 1.311433,
+      "count_ab": 1386,
+      "lift": 1.124876,
+      "p_b_given_a": 0.169189
+    }
+  ],
+  "Vệ sinh | Khăn khô": [
+    {
+      "src": "Vệ sinh | Khăn khô",
+      "dst": "Babycare | Đồ dùng vệ sinh",
+      "weight": 2.60623,
+      "count_ab": 7061,
+      "lift": 1.545594,
+      "p_b_given_a": 0.232469
+    },
+    {
+      "src": "Vệ sinh | Khăn khô",
+      "dst": "Babycare | Bé ngủ",
+      "weight": 2.210435,
+      "count_ab": 3067,
+      "lift": 4.373848,
+      "p_b_given_a": 0.100975
+    }
+  ],
+  "Vệ sinh | Khăn ướt": [
+    {
+      "src": "Vệ sinh | Khăn ướt",
+      "dst": "Vệ sinh | Giấy",
+      "weight": 3.640041,
+      "count_ab": 3393,
+      "lift": 3.122893,
+      "p_b_given_a": 0.033574
+    },
+    {
+      "src": "Vệ sinh | Khăn ướt",
+      "dst": "Thực phẩm cho bé | Snack ăn dặm",
+      "weight": 2.955006,
+      "count_ab": 20622,
+      "lift": 18.760282,
+      "p_b_given_a": 0.204057
+    }
+  ],
+  "Vệ sinh | Khẩu trang": [
+    {
+      "src": "Vệ sinh | Khẩu trang",
+      "dst": "Phụ kiện | Nón",
+      "weight": 0.607723,
+      "count_ab": 802,
+      "lift": 1.872085,
+      "p_b_given_a": 0.055154
+    },
+    {
+      "src": "Vệ sinh | Khẩu trang",
+      "dst": "Phụ kiện | Giày tập đi",
+      "weight": 0.327915,
+      "count_ab": 454,
+      "lift": 1.172525,
+      "p_b_given_a": 0.031222
+    }
+  ],
+  "Đồ chơi & Sách | 0-1Y": [
+    {
+      "src": "Đồ chơi & Sách | 0-1Y",
+      "dst": "Đồ chơi & Sách | 1Y+",
+      "weight": 4.00915,
+      "count_ab": 11115,
+      "lift": 3.020516,
+      "p_b_given_a": 0.262499
+    },
+    {
+      "src": "Đồ chơi & Sách | 0-1Y",
+      "dst": "Babycare | Chăm sóc gia đình",
+      "weight": 2.758888,
+      "count_ab": 5439,
+      "lift": 3.460501,
+      "p_b_given_a": 0.128451
+    }
+  ],
+  "Đồ chơi & Sách | 1Y+": [
+    {
+      "src": "Đồ chơi & Sách | 1Y+",
+      "dst": "Babycare | Chăm sóc gia đình",
+      "weight": 4.117346,
+      "count_ab": 8966,
+      "lift": 3.647633,
+      "p_b_given_a": 0.135397
+    },
+    {
+      "src": "Đồ chơi & Sách | 1Y+",
+      "dst": "Đồ chơi & Sách | 0-1Y",
+      "weight": 4.00915,
+      "count_ab": 11115,
+      "lift": 3.020516,
+      "p_b_given_a": 0.16785
+    }
+  ]
+}

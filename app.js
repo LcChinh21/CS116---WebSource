@@ -1024,7 +1024,59 @@ function setupForecastEvents() {
     }
 }
 
+async function setupCategoryGraphPanel() {
+    const frameEl = document.getElementById("category-graph-frame");
+    const statusEl = document.getElementById("category-graph-status");
+    const selectEl = document.getElementById("category-graph-select");
+    const openLinkEl = document.getElementById("category-graph-open-link");
+    if (!frameEl || !statusEl || !selectEl || !openLinkEl) return;
+
+    const applyGraph = async (graphPath) => {
+        try {
+            const [graphRes, utilsRes] = await Promise.all([
+                fetch(graphPath, { method: "HEAD" }),
+                fetch("data/lib/bindings/utils.js", { method: "HEAD" }),
+            ]);
+
+            if (!graphRes.ok) {
+                throw new Error("Chưa có file graph này. Hãy chạy build_category_graph.py để sinh đủ các biến thể.");
+            }
+
+            if (!utilsRes.ok) {
+                statusEl.textContent = "Đã tìm thấy graph, nhưng thiếu thư viện data/lib. Hãy chạy lại build_category_graph.py để tự đồng bộ thư viện.";
+                statusEl.style.color = "#b91c1c";
+                frameEl.style.display = "none";
+                return;
+            }
+
+            frameEl.style.display = "block";
+            frameEl.src = graphPath;
+            openLinkEl.href = graphPath;
+            statusEl.style.color = "";
+            statusEl.textContent = "Đồ thị category đã sẵn sàng. Bạn có thể kéo, zoom và xem chi tiết cạnh.";
+        } catch (err) {
+            statusEl.textContent = err?.message || "Không tải được đồ thị category.";
+            statusEl.style.color = "#b91c1c";
+            frameEl.style.display = "none";
+        }
+    };
+
+    selectEl.addEventListener("change", async (event) => {
+        const graphPath = event.target.value;
+        await applyGraph(graphPath);
+    });
+
+    try {
+        await applyGraph(selectEl.value);
+    } catch (err) {
+        statusEl.textContent = err?.message || "Không tải được đồ thị category.";
+        statusEl.style.color = "#b91c1c";
+        frameEl.style.display = "none";
+    }
+}
+
 window.addEventListener("DOMContentLoaded", () => {
     setupForecastEvents();
     checkForecastApiHealth();
+    setupCategoryGraphPanel();
 });

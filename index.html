@@ -143,6 +143,34 @@
                 </button>
             </div>
         </section>
+
+        <section class="panel category-graph-panel" id="category-graph-panel">
+            <div class="category-graph-header">
+                <h3><i class="fas fa-project-diagram"></i> Category Cross-Sell Graph</h3>
+                <p id="category-graph-status" class="category-graph-status">Đang tải đồ thị category...</p>
+            </div>
+
+            <div class="category-graph-actions">
+                <label for="category-graph-select">Loại graph</label>
+                <select id="category-graph-select" class="category-graph-select">
+                    <option value="data/category_graph.html" selected>Lift graph (full data)</option>
+                    <option value="data/category_graph_basic.html">Basic graph (full data)</option>
+                </select>
+                <a id="category-graph-open-link" class="category-graph-link" href="data/category_graph.html" target="_blank" rel="noopener noreferrer">
+                    Mở graph ở tab mới
+                </a>
+            </div>
+
+            <div class="category-graph-frame-wrap">
+                <iframe
+                    id="category-graph-frame"
+                    class="category-graph-frame"
+                    src="data/category_graph.html"
+                    title="Category Cross-Sell Graph"
+                    loading="lazy"
+                ></iframe>
+            </div>
+        </section>
     </main>
 
     <footer class="footer">
